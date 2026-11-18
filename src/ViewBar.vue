@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /** The file's views as tabs, Add view, and the shown one's options (name, grouping, sorting, done tasks). */
 import type {Fields, View} from '@type32/tasks'
-import {fieldTitle, type Patch} from '@type32/tasks-ui-components'
+import {boardGroupBy, fieldTitle, type Patch} from '@type32/tasks-ui-components'
 import {computed} from 'vue'
 import {labels, t} from './context'
 
@@ -26,8 +26,11 @@ const NONE = '\u0000none'
 const fieldItems = (test: (type: string) => boolean) => Object.values(props.fields)
     .filter(f => !f.deleted && test(f.type))
     .map(f => ({label: fieldTitle(f, labels.value), value: `values.${f.id}`}))
+// A board has columns by something: no Date, and the status while the view names nothing.
+const board = computed(() => props.active.type === 'board')
+const groupValue = computed(() => (board.value ? boardGroupBy(props.active) : props.active.groupBy ?? NONE))
 const groupItems = computed(() => [
-    {label: t('views.byDate'), value: NONE},
+    ...(board.value ? [] : [{label: t('views.byDate'), value: NONE}]),
     {label: t('views.byList'), value: 'listId'},
     {label: labels.value.starred, value: 'starred'},
     ...fieldItems(type => ['select', 'multiSelect', 'boolean'].includes(type)),
@@ -64,7 +67,7 @@ const unset = (value: string) => (value === NONE ? undefined : value)
             <UInput :model-value="active.title" class="tw:w-full" @change="(e: Event) => set({title: (e.target as HTMLInputElement).value || active.title})" />
           </UFormField>
           <UFormField :label="t('views.groupBy')">
-            <USelect :model-value="active.groupBy ?? NONE" :items="groupItems" class="tw:w-full" @update:model-value="(v: string) => set({groupBy: unset(v)})" />
+            <USelect :model-value="groupValue" :items="groupItems" class="tw:w-full" @update:model-value="(v: string) => set({groupBy: unset(v)})" />
           </UFormField>
           <UFormField :label="t('views.sortBy')">
             <div class="tw:flex tw:items-center tw:gap-2">

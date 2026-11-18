@@ -6,11 +6,11 @@
  * document, written at once. Text the tab reloads (changed by another program) is read again.
  */
 import {useToast} from '@nuxt/ui/composables'
-import {type List, resolveFields, stringify, type Task, type TaskDocument, TasksFormatError, validate, type View} from '@type32/tasks'
-import {type Patch, TaskList} from '@type32/tasks-ui-components'
+import {type FieldOption, type List, resolveFields, stringify, type Task, type TaskDocument, TasksFormatError, validate, type View} from '@type32/tasks'
+import {moveTask, type Patch, TaskBoard, TaskList, withOption} from '@type32/tasks-ui-components'
 import type {SessionContext} from '@type32/vertex-plugin'
 import {ViewerLayout} from '@type32/vertex-plugin/ui'
-import {computed, onBeforeUnmount, ref, shallowRef, watch} from 'vue'
+import {type Component, computed, onBeforeUnmount, ref, shallowRef, watch} from 'vue'
 import {context, labels, t, timeZone, weekStartsOn} from './context'
 import {read, type RecordOf, withRecord} from './document'
 import ViewBar from './ViewBar.vue'
@@ -91,6 +91,13 @@ function addView(type: string) {
     edit('views', view.id, {}, view)
     activeId.value = view.id
 }
+const changeOption = (field: string, option: string, patch: Patch<FieldOption>) => doc.value && commit(withOption(doc.value, field, option, patch, now()))
+const createOption = (field: string, option: FieldOption) => doc.value && commit(withOption(doc.value, field, option.id, {}, now(), option))
+// Order isn't synced (the format's rule), so a move stamps nothing.
+const move = (id: string, before: string | undefined) => doc.value && commit(moveTask(doc.value, id, before))
+
+/** The view types drawn, by `type`; a view of another type says it isn't drawn yet. */
+const VIEWS: Record<string, Component> = {list: TaskList, board: TaskBoard}
 </script>
 
 <template>
@@ -124,8 +131,10 @@ function addView(type: string) {
         @add="addView"
         @remove="removeView"
       />
-      <TaskList
-        v-if="active.type === 'list'"
+      <component
+        :is="VIEWS[active.type]"
+        v-if="VIEWS[active.type]"
+        :key="active.id"
         class="tw:min-h-0 tw:flex-1"
         :document="doc"
         :view="active"
@@ -137,11 +146,14 @@ function addView(type: string) {
         @create="createTask"
         @change-list="changeList"
         @create-list="createList"
+        @change-option="changeOption"
+        @create-option="createOption"
+        @move="move"
       >
         <template #notes="{text, update}">
           <TaskNotes :text="text" :note-path="filePath" @update="update" />
         </template>
-      </TaskList>
+      </component>
       <p v-else class="tw:p-8 tw:text-center tw:text-sm tw:text-muted">{{ t('views.unsupported', {type: active.type}) }}</p>
     </div>
   </ViewerLayout>

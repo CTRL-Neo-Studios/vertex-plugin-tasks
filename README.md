@@ -9,6 +9,9 @@ A [Vertex](https://github.com/CTRL-Neo-Studios/vertex) plugin for `.task` files,
   the file's; a task's editor opens in place (title, notes in Markdown, Do, Due with a time, repeat, list, tags,
   priority, star, status, the file's own fields); the checkbox completes a task, or moves a repeating one to its next
   time; lists beside, added and renamed there.
+- **The Board:** a column a status (or a list, a priority, a tag, a star, a field of the file's), empty ones too;
+  cards dragged between columns and up and down; a card's editor beside it; New task at a column's foot. Statuses
+  added (each with what it means: to do, in progress, done, cancelled), renamed, coloured and deleted on the board.
 - **Views** are the file's (the format's `views`), so other apps of the format show the same ones. Add a view, name
   it, group, sort and hide done tasks in its options.
 - A file is written back in the format it was found in (YAML, JSON or TOML), keeping what the plugin doesn't know. A
@@ -16,7 +19,7 @@ A [Vertex](https://github.com/CTRL-Neo-Studios/vertex) plugin for `.task` files,
 
 Settings: the first day of the week, and the time zone that decides which day is today.
 
-Board, calendar and timeline views are coming.
+Calendar and timeline views are coming.
 
 ## Development
 
