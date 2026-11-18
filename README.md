@@ -15,6 +15,11 @@ A [Vertex](https://github.com/CTRL-Neo-Studios/vertex) plugin for `.task` files,
 - **The Calendar:** a month, a week or a day, each time of a repeating task, at the time zone of the settings; a click
   opens a task, a drag moves it or stretches it, a drag on empty hours (or a double click) makes one; moving one time
   of a repeating task asks whether it's that one or all of them. Lists switched on and off beside it.
+- **The Timeline:** a Gantt: the outline (subtasks under their parent, folding; length, progress) beside bars on a
+  day, week or month scale, moments as diamonds, dues as marks, a parent's stretch, dependency lines and today's line.
+  A bar dragged or stretched moves its task; a line drawn from the dot after a bar to another row makes that task wait
+  for it (one that would make a loop is refused); a right click: Edit, Duplicate, its list (its colour), the
+  dependencies to remove, Delete.
 - **Views** are the file's (the format's `views`), so other apps of the format show the same ones. Add a view, name
   it, group, sort and hide done tasks in its options.
 - A file is written back in the format it was found in (YAML, JSON or TOML), keeping what the plugin doesn't know. A

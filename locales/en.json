@@ -26,7 +26,8 @@
         "types": {
           "list": "List",
           "board": "Board",
-          "calendar": "Calendar"
+          "calendar": "Calendar",
+          "timeline": "Timeline"
         },
         "add": "Add view",
         "options": "View options",
@@ -103,6 +104,11 @@
         "month": "Month",
         "previous": "Previous",
         "next": "Next",
+        "edit": "Edit",
+        "duplicate": "Duplicate",
+        "list": "List",
+        "duration": "Duration",
+        "removeDependency": "Remove dependency on",
         "star": "Star",
         "unstar": "Remove star",
         "more": "More",

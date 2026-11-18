@@ -7,7 +7,7 @@
  */
 import {useOverlay, useToast} from '@nuxt/ui/composables'
 import {type FieldOption, type List, resolveFields, stringify, type Task, type TaskDocument, TasksFormatError, validate, type View} from '@type32/tasks'
-import {type CalendarItem, detachOccurrence, moveTask, type Patch, type Shift, shiftTask, TaskBoard, TaskCalendar, TaskList, withOption} from '@type32/tasks-ui-components'
+import {type CalendarItem, detachOccurrence, moveTask, type Patch, type Shift, shiftTask, TaskBoard, TaskCalendar, TaskList, TaskTimeline, withOption} from '@type32/tasks-ui-components'
 import type {SessionContext} from '@type32/vertex-plugin'
 import {ViewerLayout} from '@type32/vertex-plugin/ui'
 import {type Component, computed, onBeforeUnmount, ref, shallowRef, watch} from 'vue'
@@ -106,11 +106,11 @@ async function moveOccurrence(item: CalendarItem, shift: Shift) {
     const {series, single} = detachOccurrence(item.task, item, shift, now())
     commit(withRecord(withRecord(doc.value, 'tasks', item.task.id, series, now()), 'tasks', single.id, {}, now(), single))
 }
-// The calendar's own changes (its scale, its lists) are to the view it draws.
+// The calendar's and the timeline's own changes (scale, lists) are to the view they draw.
 const changeShown = (patch: Patch<View>) => changeView(active.value.id, patch)
 
 /** The view types drawn, by `type`; a view of another type says it isn't drawn yet. */
-const VIEWS: Record<string, Component> = {list: TaskList, board: TaskBoard, calendar: TaskCalendar}
+const VIEWS: Record<string, Component> = {list: TaskList, board: TaskBoard, calendar: TaskCalendar, timeline: TaskTimeline}
 </script>
 
 <template>
