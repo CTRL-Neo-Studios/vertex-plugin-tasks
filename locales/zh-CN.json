@@ -11,6 +11,31 @@
       },
       "refused": "这项更改会破坏文件",
       "makeTask": "将此笔记设为任务",
+      "commands": {
+        "showPanel": "显示任务面板",
+        "newTask": "新建任务…",
+        "newTaskHelp": "添加到 {file}",
+        "taskTitle": "要做的事",
+        "add": "添加",
+        "added": "已将“{title}”添加到 {file}",
+        "addFailed": "无法添加任务",
+        "cantCreate": "无法创建 {path}",
+        "open": "打开",
+        "import": "从 iCalendar 导入…",
+        "importFailed": "无法导入日历",
+        "imported": "已导入 {count} 个任务到 {file}",
+        "droppedHelp": "未能导入的内容：",
+        "nothingDropped": "全部已导入。",
+        "export": "导出为 iCalendar…",
+        "exportFailed": "无法导出任务",
+        "exported": "已导出到 {path}"
+      },
+      "palette": {
+        "group": "任务"
+      },
+      "alerts": {
+        "due": "{time} 到期 · {file}"
+      },
       "panel": {
         "title": "任务",
         "overdue": "已逾期",
@@ -76,7 +101,11 @@
         "sunday": "星期日",
         "saturday": "星期六",
         "timeZone": "时区",
-        "timeZoneHelp": "决定哪天是今天。IANA 名称，如 Asia/Shanghai；留空使用系统时区。"
+        "timeZoneHelp": "决定哪天是今天。IANA 名称，如 Asia/Shanghai；留空使用系统时区。",
+        "inbox": "新任务的位置",
+        "inboxHelp": "新建任务…添加到的 .task 文件；不存在时会创建。",
+        "alerts": "任务到期时通知",
+        "alertsHelp": "在任务的到期时间，且 Vertex 打开了它的工作区时。没有具体时间的日期不会通知。"
       },
       "ui": {
         "today": "今天",

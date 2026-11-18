@@ -8,6 +8,10 @@ export interface Config {
     weekStart: 'auto' | 'monday' | 'sunday' | 'saturday'
     /** An IANA zone; empty: the system's. */
     timeZone: string
+    /** Where New task… puts a task: a `.task` file's workspace-relative path; empty: `Inbox.task`. */
+    inbox: string
+    /** A notification when a task with a due time is due. */
+    alerts: boolean
 }
 
 let current: PluginContext<Config> | undefined

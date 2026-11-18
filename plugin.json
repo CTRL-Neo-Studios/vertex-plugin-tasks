@@ -7,10 +7,12 @@
   "author": "CTRL Neo Studios",
   "repository": "https://github.com/CTRL-Neo-Studios/vertex-plugin-tasks",
   "apiVersion": 1,
+  "permissions": ["notifications"],
   "config": {
     "overridable": {
       "weekStart": "workspace",
-      "timeZone": "workspace"
+      "timeZone": "workspace",
+      "inbox": "workspace"
     },
     "schema": [
       {
@@ -32,6 +34,21 @@
         "description": "plugins.tasks.config.timeZoneHelp",
         "default": "",
         "placeholder": "Europe/Berlin"
+      },
+      {
+        "key": "inbox",
+        "type": "path",
+        "kind": "file",
+        "label": "plugins.tasks.config.inbox",
+        "description": "plugins.tasks.config.inboxHelp",
+        "default": "Inbox.task"
+      },
+      {
+        "key": "alerts",
+        "type": "switch",
+        "label": "plugins.tasks.config.alerts",
+        "description": "plugins.tasks.config.alertsHelp",
+        "default": true
       }
     ]
   }

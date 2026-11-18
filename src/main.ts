@@ -1,9 +1,11 @@
 import {definePlugin, type SessionContext} from '@type32/vertex-plugin'
 import '@type32/tasks-ui-components/style.css'
+import {watchAlerts} from './alerts'
+import {registerCommands} from './commands'
 import {type Config, setContext} from './context'
 import {rewriteTaskLinks, taskLinkTargets} from './links'
 import './style.css'
-import {withNoteTask} from './workspace'
+import {makeNoteTask} from './workspace'
 
 export default definePlugin<Config>({
     setup(ctx) {
@@ -43,9 +45,19 @@ export default definePlugin<Config>({
             component: () => import('./TasksPanel.vue'),
         })
 
-        // A note's menu in Files: Make this note a task (a `task:` titled as the note, its body untouched).
+        ctx.views.overlay({
+            id: 'tasks',
+            component: () => import('./TasksOverlay.vue'),
+        })
+
+        // This window's session: the commands' and the Files menu's, and the alerts' workspace.
         let session: SessionContext | undefined
-        ctx.onSession(s => (session = s))
+        ctx.onSession((s) => {
+            session = s
+            watchAlerts(ctx, s)
+        })
+        registerCommands(ctx, () => session)
+        // A note's menu in Files: Make this note a task (a `task:` titled as the note, its body untouched).
         ctx.files.menuItem({
             id: 'tasks-make',
             items: ({files}) => {
@@ -53,15 +65,7 @@ export default definePlugin<Config>({
                 if (!session || files.length !== 1 || !file || file.isFolder || file.fileExt !== 'md') return []
                 if (file.properties?.task && typeof file.properties.task === 'object') return []
                 const label = ctx.i18n.t('plugins.tasks.makeTask')
-                return [{
-                    label,
-                    icon: 'i-lucide-list-checks',
-                    onSelect: async () => {
-                        const text = await session!.files.vault().read(file.relativePath)
-                        const title = file.fileName.replace(/\.md$/i, '')
-                        await session!.files.edit([{uuid: file.uuid, text: withNoteTask(text, {id: crypto.randomUUID(), title, updatedAt: new Date().toISOString()})}], label)
-                    },
-                }]
+                return [{label, icon: 'i-lucide-list-checks', onSelect: () => makeNoteTask(session!, file, label)}]
             },
         })
     },

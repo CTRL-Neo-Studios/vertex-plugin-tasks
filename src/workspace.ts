@@ -1,11 +1,11 @@
 import {frontmatterRange} from '@type32/codemirror-rich-obsidian-editor'
-import {type Fields, parse, resolveFields, stringify, type Task, type TaskDocument} from '@type32/tasks'
+import {type Fields, parse, resolveFields, stringify, type Task, type TaskDocument, TasksFormatError} from '@type32/tasks'
 import {applyPatch, type TaskPatch} from '@type32/tasks-ui-components'
 import type {SessionContext} from '@type32/vertex-plugin'
 import {obsidianYaml, setFrontmatterProperty} from '@type32/vertex-plugin/vault'
 import {computed, type ComputedRef, effectScope, shallowRef, toRaw, watch} from 'vue'
 import {t} from './context'
-import {checkNoteTask, noteTask, sniff, withRecord} from './document'
+import {checkNoteTask, noteTask, read, sniff, withRecord} from './document'
 
 /** A task of the workspace: in a note's frontmatter (`note`), or in a `.task` file. */
 export interface WorkspaceTask {
@@ -41,6 +41,35 @@ export const focusRequest = shallowRef<{ uuid: string, id: string }>()
 export function openTask(session: SessionContext, entry: WorkspaceTask) {
     if (!entry.note) focusRequest.value = {uuid: entry.uuid, id: entry.task.id}
     session.tabs.open(entry.uuid)
+}
+
+/** Makes a note a task: a `task:` titled as the note, its body untouched. One step of Files' undo, named `label`. */
+export async function makeNoteTask(session: SessionContext, file: { uuid: string, relativePath: string, fileName: string }, label: string) {
+    const text = await session.files.vault().read(file.relativePath)
+    const title = file.fileName.replace(/\.md$/i, '')
+    await session.files.edit([{uuid: file.uuid, text: withNoteTask(text, {id: crypto.randomUUID(), title, updatedAt: new Date().toISOString()})}], label)
+}
+
+/**
+ * A new task in the `.task` file at `path` (workspace-relative), in its first list; the file made when it's missing (a
+ * new document, as New Task List makes). Throws `TasksFormatError` for a file that doesn't read. Its uuid.
+ */
+export async function addTask(session: SessionContext, path: string, title: string) {
+    const now = new Date().toISOString()
+    let file = session.index.files().find(f => !f.isFolder && f.relativePath === path)
+    if (!file) {
+        const slash = path.lastIndexOf('/')
+        file = await session.files.create(slash === -1 ? '' : path.slice(0, slash), path.slice(slash + 1))
+        if (!file) throw new Error(t('commands.cantCreate', {path}))
+    }
+    const text = await session.files.vault().read(path)
+    const current = read(text, {list: t('newFile.list'), listView: t('views.types.list'), boardView: t('views.types.board')}, now)
+    if (!('doc' in current)) throw new TasksFormatError(current.issues)
+    const listId = current.doc.lists?.find(l => !l.deletedAt)?.id
+    const task: Task = {id: crypto.randomUUID(), title, ...(listId !== undefined && {listId}), updatedAt: now}
+    const next = withRecord(current.doc, 'tasks', task.id, {}, now, task)
+    await session.files.edit([{uuid: file.uuid, text: stringify(next, current.format)}], t('commands.newTask'))
+    return file.uuid
 }
 
 /**

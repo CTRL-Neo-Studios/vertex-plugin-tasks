@@ -11,6 +11,31 @@
       },
       "refused": "That change would break the file",
       "makeTask": "Make this note a task",
+      "commands": {
+        "showPanel": "Show Tasks panel",
+        "newTask": "New task…",
+        "newTaskHelp": "Added to {file}",
+        "taskTitle": "What's to do",
+        "add": "Add",
+        "added": "Added “{title}” to {file}",
+        "addFailed": "Couldn't add the task",
+        "cantCreate": "Couldn't make {path}",
+        "open": "Open",
+        "import": "Import from iCalendar…",
+        "importFailed": "Couldn't import the calendar",
+        "imported": "Imported {count} task(s) into {file}",
+        "droppedHelp": "What couldn't be imported:",
+        "nothingDropped": "Everything was imported.",
+        "export": "Export to iCalendar…",
+        "exportFailed": "Couldn't export the tasks",
+        "exported": "Exported to {path}"
+      },
+      "palette": {
+        "group": "Tasks"
+      },
+      "alerts": {
+        "due": "Due {time} · {file}"
+      },
       "panel": {
         "title": "Tasks",
         "overdue": "Overdue",
@@ -76,7 +101,11 @@
         "sunday": "Sunday",
         "saturday": "Saturday",
         "timeZone": "Time zone",
-        "timeZoneHelp": "Which day is today. An IANA name like Europe/Berlin; empty: the system's."
+        "timeZoneHelp": "Which day is today. An IANA name like Europe/Berlin; empty: the system's.",
+        "inbox": "Where new tasks go",
+        "inboxHelp": "The .task file New task… adds to; made when it's missing.",
+        "alerts": "Notify when a task is due",
+        "alertsHelp": "At a task's due time, while Vertex has its workspace open. Dates without a time don't notify."
       },
       "ui": {
         "today": "Today",

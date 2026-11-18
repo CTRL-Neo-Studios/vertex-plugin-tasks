@@ -31,9 +31,15 @@ A [Vertex](https://github.com/CTRL-Neo-Studios/vertex) plugin for `.task` files,
   each edit written to the file it's in.
 - **`![[file.task]]`** in a note draws the file's first view, and works.
 - **Links** in tasks' notes count in backlinks and the graph, and follow renames.
-- **Make this note a task** in a note's menu in Files.
+- **Make this note a task** in a note's menu in Files, and in the palette for the shown note.
+- **iCalendar:** File → Import from iCalendar… merges a calendar (events and to-dos, by UID) into the shown `.task`
+  file and lists what it couldn't take; Export to iCalendar… writes the file as `.ics`.
+- **The palette:** Show Tasks panel; New task… (into the file the settings name, `Inbox.task` by default); and the
+  workspace's open tasks, found by their title.
+- **Alerts:** a notification when a task with a due time is due, while Vertex has its workspace open; once each. It
+  asks for the `notifications` permission.
 
-Settings: the first day of the week, and the time zone that decides which day is today.
+Settings: the first day of the week, the time zone that decides which day is today, where new tasks go, and alerts.
 
 Notes' tasks are written with Vertex's frontmatter writer (as Bases writes properties); the body isn't touched.
 
