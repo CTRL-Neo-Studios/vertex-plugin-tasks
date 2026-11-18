@@ -1,7 +1,119 @@
 {
   "plugins": {
     "tasks": {
-      "name": "任务"
+      "name": "任务",
+      "fileType": "任务清单",
+      "new": "新建任务清单",
+      "newCommand": "新建任务清单…",
+      "newDescription": "用于待办、日程和时间线的 .task 文件",
+      "newFile": {
+        "list": "收件箱"
+      },
+      "refused": "这项更改会破坏文件",
+      "problems": {
+        "title": "无法读取此文件",
+        "help": "请在其他编辑器中修正：能读取后即可打开，在此之前 Vertex 不会覆盖它。",
+        "root": "文件"
+      },
+      "views": {
+        "types": {
+          "list": "列表",
+          "board": "看板"
+        },
+        "add": "添加视图",
+        "options": "视图选项",
+        "name": "名称",
+        "groupBy": "分组依据",
+        "byDate": "日期",
+        "byList": "清单",
+        "sortBy": "排序依据",
+        "fileOrder": "文件顺序",
+        "descending": "降序",
+        "openOnly": "隐藏已完成任务",
+        "delete": "删除视图",
+        "unsupported": "暂不支持 {type} 类型的视图",
+        "sort": {
+          "title": "标题",
+          "start": "开始",
+          "end": "结束",
+          "due": "截止",
+          "completedAt": "完成时间",
+          "updatedAt": "最后修改",
+          "starred": "星标"
+        }
+      },
+      "config": {
+        "weekStart": "每周的第一天",
+        "weekStartAuto": "跟随语言",
+        "monday": "星期一",
+        "sunday": "星期日",
+        "saturday": "星期六",
+        "timeZone": "时区",
+        "timeZoneHelp": "决定哪天是今天。IANA 名称，如 Asia/Shanghai；留空使用系统时区。"
+      },
+      "ui": {
+        "today": "今天",
+        "upcoming": "即将到来",
+        "anytime": "随时",
+        "done": "已完成",
+        "none": "无",
+        "yes": "是",
+        "no": "否",
+        "starred": "已加星标",
+        "notStarred": "未加星标",
+        "allTasks": "全部任务",
+        "lists": "清单",
+        "noList": "无清单",
+        "newList": "新建清单",
+        "listName": "清单名称",
+        "rename": "重命名",
+        "color": "颜色",
+        "delete": "删除",
+        "newTask": "新任务",
+        "title": "标题",
+        "notes": "备注",
+        "do": "开始",
+        "due": "截止",
+        "addTime": "添加时间",
+        "removeTime": "移除时间",
+        "clear": "清除",
+        "repeat": "重复",
+        "repeatNone": "永不",
+        "repeatDaily": "每天",
+        "repeatWeekly": "每周",
+        "repeatMonthly": "每月",
+        "repeatYearly": "每年",
+        "repeatCustom": "自定义",
+        "repeatNeedsDate": "设置开始或截止日期后才能重复",
+        "addTag": "添加标签",
+        "star": "加星标",
+        "unstar": "移除星标",
+        "more": "更多",
+        "addSubtask": "添加子任务",
+        "complete": "完成",
+        "reopen": "重新打开",
+        "empty": "没有任务",
+        "fields": {
+          "status": "状态",
+          "priority": "优先级",
+          "tags": "标签",
+          "progress": "进度",
+          "location": "地点"
+        },
+        "options": {
+          "status": {
+            "todo": "待办",
+            "doing": "进行中",
+            "done": "已完成",
+            "cancelled": "已取消"
+          },
+          "priority": {
+            "low": "低",
+            "medium": "中",
+            "high": "高"
+          }
+        }
+      }
     }
   }
 }

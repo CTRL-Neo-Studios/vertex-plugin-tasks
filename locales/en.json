@@ -1,7 +1,119 @@
 {
   "plugins": {
     "tasks": {
-      "name": "Tasks"
+      "name": "Tasks",
+      "fileType": "Task list",
+      "new": "New Task List",
+      "newCommand": "New Task List…",
+      "newDescription": "A .task file for todos, events and timelines",
+      "newFile": {
+        "list": "Inbox"
+      },
+      "refused": "That change would break the file",
+      "problems": {
+        "title": "This file can't be read",
+        "help": "Fix it in another editor: it opens once it reads, and Vertex doesn't write over it until then.",
+        "root": "file"
+      },
+      "views": {
+        "types": {
+          "list": "List",
+          "board": "Board"
+        },
+        "add": "Add view",
+        "options": "View options",
+        "name": "Name",
+        "groupBy": "Group by",
+        "byDate": "Date",
+        "byList": "List",
+        "sortBy": "Sort by",
+        "fileOrder": "File order",
+        "descending": "Descending",
+        "openOnly": "Hide done tasks",
+        "delete": "Delete view",
+        "unsupported": "Views of type {type} aren't drawn yet",
+        "sort": {
+          "title": "Title",
+          "start": "Do",
+          "end": "End",
+          "due": "Due",
+          "completedAt": "Completed",
+          "updatedAt": "Last changed",
+          "starred": "Starred"
+        }
+      },
+      "config": {
+        "weekStart": "First day of the week",
+        "weekStartAuto": "The language's",
+        "monday": "Monday",
+        "sunday": "Sunday",
+        "saturday": "Saturday",
+        "timeZone": "Time zone",
+        "timeZoneHelp": "Which day is today. An IANA name like Europe/Berlin; empty: the system's."
+      },
+      "ui": {
+        "today": "Today",
+        "upcoming": "Upcoming",
+        "anytime": "Anytime",
+        "done": "Done",
+        "none": "None",
+        "yes": "Yes",
+        "no": "No",
+        "starred": "Starred",
+        "notStarred": "Not starred",
+        "allTasks": "All tasks",
+        "lists": "Lists",
+        "noList": "No list",
+        "newList": "New list",
+        "listName": "List name",
+        "rename": "Rename",
+        "color": "Colour",
+        "delete": "Delete",
+        "newTask": "New task",
+        "title": "Title",
+        "notes": "Notes",
+        "do": "Do",
+        "due": "Due",
+        "addTime": "Add time",
+        "removeTime": "Remove time",
+        "clear": "Clear",
+        "repeat": "Repeat",
+        "repeatNone": "Never",
+        "repeatDaily": "Every day",
+        "repeatWeekly": "Every week",
+        "repeatMonthly": "Every month",
+        "repeatYearly": "Every year",
+        "repeatCustom": "Custom",
+        "repeatNeedsDate": "Set a Do or Due date to repeat",
+        "addTag": "Add a tag",
+        "star": "Star",
+        "unstar": "Remove star",
+        "more": "More",
+        "addSubtask": "Add subtask",
+        "complete": "Complete",
+        "reopen": "Reopen",
+        "empty": "No tasks",
+        "fields": {
+          "status": "Status",
+          "priority": "Priority",
+          "tags": "Tags",
+          "progress": "Progress",
+          "location": "Location"
+        },
+        "options": {
+          "status": {
+            "todo": "To do",
+            "doing": "In progress",
+            "done": "Done",
+            "cancelled": "Cancelled"
+          },
+          "priority": {
+            "low": "Low",
+            "medium": "Medium",
+            "high": "High"
+          }
+        }
+      }
     }
   }
 }
