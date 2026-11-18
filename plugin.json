@@ -1,0 +1,10 @@
+{
+  "id": "tasks",
+  "name": "Tasks",
+  "version": "0.0.0",
+  "description": "Todos, events and timelines in .task files: a list of reminders, a board, a calendar and a timeline.",
+  "icon": "i-lucide-list-checks",
+  "author": "CTRL Neo Studios",
+  "repository": "https://github.com/CTRL-Neo-Studios/vertex-plugin-tasks",
+  "apiVersion": 1
+}
