@@ -7,6 +7,7 @@
   "author": "CTRL Neo Studios",
   "repository": "https://github.com/CTRL-Neo-Studios/vertex-plugin-tasks",
   "apiVersion": 1,
+  "requires": ["bases?"],
   "permissions": ["notifications"],
   "config": {
     "overridable": {

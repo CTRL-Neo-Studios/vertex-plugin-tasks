@@ -33,6 +33,14 @@
       "palette": {
         "group": "Tasks"
       },
+      "bases": {
+        "calendar": "Calendar (Tasks)",
+        "timeline": "Timeline (Tasks)",
+        "start": "Start",
+        "end": "End",
+        "due": "Due",
+        "moved": "Move {name}"
+      },
       "alerts": {
         "due": "Due {time} · {file}"
       },

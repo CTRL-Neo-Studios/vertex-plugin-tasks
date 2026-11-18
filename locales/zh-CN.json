@@ -33,6 +33,14 @@
       "palette": {
         "group": "任务"
       },
+      "bases": {
+        "calendar": "日历（任务）",
+        "timeline": "时间线（任务）",
+        "start": "开始",
+        "end": "结束",
+        "due": "截止",
+        "moved": "移动 {name}"
+      },
       "alerts": {
         "due": "{time} 到期 · {file}"
       },

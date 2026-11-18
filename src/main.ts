@@ -50,6 +50,27 @@ export default definePlugin<Config>({
             component: () => import('./TasksOverlay.vue'),
         })
 
+        // With Bases on: the Calendar and the Timeline as layouts of a base, timed by properties the view names.
+        const times = ['start', 'end', 'due'].map(key => ({key, label: `plugins.tasks.bases.${key}`, kind: 'property' as const}))
+        ctx.whenPlugin('bases', (bases) => {
+            bases.registerView({
+                type: 'tasks-calendar',
+                label: 'plugins.tasks.bases.calendar',
+                icon: 'i-lucide-calendar',
+                options: times,
+                embedStyle: () => ({height: '600px'}),
+                component: () => import('./BaseLayout.vue'),
+            })
+            bases.registerView({
+                type: 'tasks-timeline',
+                label: 'plugins.tasks.bases.timeline',
+                icon: 'i-lucide-chart-gantt',
+                options: times,
+                embedStyle: () => ({height: '480px'}),
+                component: () => import('./BaseLayout.vue'),
+            })
+        })
+
         // This window's session: the commands' and the Files menu's, and the alerts' workspace.
         let session: SessionContext | undefined
         ctx.onSession((s) => {

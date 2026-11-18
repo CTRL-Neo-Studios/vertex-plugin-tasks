@@ -32,6 +32,15 @@ const BUILT_IN = resolveFields({})
 /** A note's text with its `task:` replaced; the body and the other keys as Obsidian writes frontmatter. */
 export const withNoteTask = (text: string, task: Task) => setFrontmatterProperty(text, 'task', task, yaml)
 
+/** Writes frontmatter properties of the note at `path` (workspace-relative; `null` empties one), as one step of Files' undo. */
+export async function setNoteProperties(session: SessionContext, path: string, writes: { key: string, value: unknown }[], label: string) {
+    const file = session.index.files().find(f => !f.isFolder && f.relativePath === path)
+    if (!file || writes.length === 0) return
+    let text = await session.files.vault().read(path)
+    for (const {key, value} of writes) text = setFrontmatterProperty(text, key, value, yaml)
+    await session.files.edit([{uuid: file.uuid, text}], label)
+}
+
 const stores = new WeakMap<object, WorkspaceTasks>()
 
 /** A task to show once its `.task` file's tab is drawn: the viewer of that file takes it (and clears it). */

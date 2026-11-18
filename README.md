@@ -38,6 +38,9 @@ A [Vertex](https://github.com/CTRL-Neo-Studios/vertex) plugin for `.task` files,
   workspace's open tasks, found by their title.
 - **Alerts:** a notification when a task with a due time is due, while Vertex has its workspace open; once each. It
   asks for the `notifications` permission.
+- **Bases layouts** (with Bases on): Calendar (Tasks) and Timeline (Tasks) for any base, timed by the properties you
+  pick in Configure view (`start`, `end` and `due` by default). Dragging an item writes its note's dates; a click opens
+  the note; a double click on an empty day makes a new one with that date.
 
 Settings: the first day of the week, the time zone that decides which day is today, where new tasks go, and alerts.
 
