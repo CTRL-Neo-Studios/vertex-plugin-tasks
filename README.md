@@ -24,10 +24,18 @@ A [Vertex](https://github.com/CTRL-Neo-Studios/vertex) plugin for `.task` files,
   it, group, sort and hide done tasks in its options.
 - A file is written back in the format it was found in (YAML, JSON or TOML), keeping what the plugin doesn't know. A
   file that doesn't read shows what's wrong and isn't written over.
+- **The Tasks panel** (right sidebar): Overdue, Today and Upcoming across every `.task` file and every note that is a
+  task (`task:` in its frontmatter, the format's Markdown task file). Tick one to complete it in its own file; click
+  one to open its note, or its file at that task.
+- **A calendar can show the workspace's tasks** (its options): the notes' and the other files' tasks beside its own,
+  each edit written to the file it's in.
+- **`![[file.task]]`** in a note draws the file's first view, and works.
+- **Links** in tasks' notes count in backlinks and the graph, and follow renames.
+- **Make this note a task** in a note's menu in Files.
 
 Settings: the first day of the week, and the time zone that decides which day is today.
 
-A timeline view is coming.
+Notes' tasks are written with Vertex's frontmatter writer (as Bases writes properties); the body isn't touched.
 
 ## Development
 

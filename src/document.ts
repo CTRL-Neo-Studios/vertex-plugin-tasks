@@ -1,4 +1,4 @@
-import {type Format, type Issue, parse, type List, type Task, type TaskDocument, TasksFormatError, type View} from '@type32/tasks'
+import {type Format, type Issue, parse, type List, type Task, type TaskDocument, TasksFormatError, validate, type View} from '@type32/tasks'
 import {applyPatch, type Patch} from '@type32/tasks-ui-components'
 
 /**
@@ -61,4 +61,25 @@ export function withRecord<C extends Collection>(doc: TaskDocument, collection: 
         ? [...records, applyPatch((added ?? patch) as RecordOf<C>, patch, now)]
         : records.map((r, i) => (i === at ? applyPatch(r, patch, now) : r))
     return {...doc, [collection]: next}
+}
+
+/**
+ * Checks a note's task as the format reads a task file alone: its shape, its times and its values against the built-in
+ * fields. `listId`, `parentId` and `dependsOn` name records of a document a note isn't in, so they aren't checked.
+ * Throws `TasksFormatError`.
+ */
+export function checkNoteTask(task: Task) {
+    const {listId: _l, parentId: _p, dependsOn: _d, ...alone} = task
+    validate({version: '1.1', tasks: [alone]})
+}
+
+/** A note's `task:` (its frontmatter's) when it's a task the format takes; `notes` is the body, never a key. */
+export function noteTask(raw: unknown): Task | undefined {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw) || 'notes' in raw) return undefined
+    try {
+        checkNoteTask(raw as Task)
+        return raw as Task
+    } catch {
+        return undefined
+    }
 }

@@ -10,6 +10,22 @@
         "list": "Inbox"
       },
       "refused": "That change would break the file",
+      "makeTask": "Make this note a task",
+      "panel": {
+        "title": "Tasks",
+        "overdue": "Overdue",
+        "today": "Today",
+        "upcoming": "Upcoming",
+        "empty": "Nothing to do. Tasks with a date, in .task files and in notes, show here."
+      },
+      "workspace": {
+        "edit": "Edit “{title}”",
+        "openIn": "Open in {path}"
+      },
+      "embed": {
+        "edit": "Edit {name}",
+        "missing": "{path} isn't in the workspace"
+      },
       "occurrence": {
         "title": "Move a repeating task",
         "description": "Move only this time of “{title}”, or every time?",
@@ -39,6 +55,8 @@
         "fileOrder": "File order",
         "descending": "Descending",
         "openOnly": "Hide done tasks",
+        "workspaceTasks": "Show the workspace's tasks",
+        "workspaceTasksHelp": "Notes that are tasks, and the other .task files",
         "delete": "Delete view",
         "unsupported": "Views of type {type} aren't drawn yet",
         "sort": {

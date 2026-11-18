@@ -10,6 +10,22 @@
         "list": "收件箱"
       },
       "refused": "这项更改会破坏文件",
+      "makeTask": "将此笔记设为任务",
+      "panel": {
+        "title": "任务",
+        "overdue": "已逾期",
+        "today": "今天",
+        "upcoming": "即将到来",
+        "empty": "没有待办。.task 文件和笔记中带日期的任务会显示在这里。"
+      },
+      "workspace": {
+        "edit": "编辑“{title}”",
+        "openIn": "在 {path} 中打开"
+      },
+      "embed": {
+        "edit": "编辑 {name}",
+        "missing": "工作区中没有 {path}"
+      },
       "occurrence": {
         "title": "移动重复任务",
         "description": "只移动“{title}”的这一次，还是全部？",
@@ -39,6 +55,8 @@
         "fileOrder": "文件顺序",
         "descending": "降序",
         "openOnly": "隐藏已完成任务",
+        "workspaceTasks": "显示工作区的任务",
+        "workspaceTasksHelp": "作为任务的笔记，以及其他 .task 文件",
         "delete": "删除视图",
         "unsupported": "暂不支持 {type} 类型的视图",
         "sort": {

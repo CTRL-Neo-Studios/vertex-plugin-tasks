@@ -2,7 +2,7 @@ import {expect, test} from 'bun:test'
 import {parse, stringify, validate} from '@type32/tasks'
 import {defaultLabels} from '@type32/tasks-ui-components'
 import en from '../locales/en.json'
-import {read, sniff, withRecord} from './document'
+import {noteTask, read, sniff, withRecord} from './document'
 
 const at = '2026-11-18T10:00:00Z'
 const names = {list: 'Inbox', listView: 'List', boardView: 'Board'}
@@ -54,4 +54,13 @@ test("en.json has every string the components show", () => {
     expect(Object.keys(strings).filter(k => typeof ui[k] !== 'string')).toEqual([])
     expect(Object.keys(fields).filter(k => !ui.fields[k])).toEqual([])
     expect(Object.keys(options).filter(k => !ui.options[k.split('.')[0]!]?.[k.split('.')[1]!])).toEqual([])
+})
+
+test("a note's task: its shape and times checked, its references to another document kept unchecked", () => {
+    const task = {id: 'n', title: 'N', due: '2026-11-20', listId: 'elsewhere', dependsOn: ['x'], updatedAt: at}
+    expect(noteTask(task)).toBe(task)
+    expect(noteTask({...task, end: '2026-11-19'})).toBeUndefined() // an end without a start
+    expect(noteTask({...task, notes: 'the body is the notes'})).toBeUndefined()
+    expect(noteTask({...task, values: {status: 'nope'}})).toBeUndefined()
+    expect(noteTask('task')).toBeUndefined()
 })

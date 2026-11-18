@@ -89,6 +89,13 @@ const unset = (value: string) => (value === NONE ? undefined : value)
             </div>
           </UFormField>
           <USwitch :model-value="!!active.openOnly" :label="t('views.openOnly')" @update:model-value="(v: boolean) => set({openOnly: v || undefined})" />
+          <USwitch
+            v-if="active.type === 'calendar'"
+            :model-value="active.workspaceTasks === true"
+            :label="t('views.workspaceTasks')"
+            :description="t('views.workspaceTasksHelp')"
+            @update:model-value="(v: boolean) => set({workspaceTasks: v || undefined})"
+          />
           <UButton
             v-if="views.length > 1"
             icon="i-lucide-trash-2"
