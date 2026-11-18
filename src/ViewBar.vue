@@ -18,7 +18,11 @@ const emit = defineEmits<{
 }>()
 
 /** The view types this plugin draws, in Add view's order. */
-const TYPES = [{type: 'list', icon: 'i-lucide-list-checks'}, {type: 'board', icon: 'i-lucide-square-kanban'}]
+const TYPES = [
+    {type: 'list', icon: 'i-lucide-list-checks'},
+    {type: 'board', icon: 'i-lucide-square-kanban'},
+    {type: 'calendar', icon: 'i-lucide-calendar'},
+]
 const iconOf = (type: string) => TYPES.find(x => x.type === type)?.icon ?? 'i-lucide-circle-help'
 const addItems = computed(() => TYPES.map(({type, icon}) => ({label: t(`views.types.${type}`), icon, onSelect: () => emit('add', type)})))
 

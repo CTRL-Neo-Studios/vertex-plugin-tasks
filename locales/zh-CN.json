@@ -10,6 +10,13 @@
         "list": "收件箱"
       },
       "refused": "这项更改会破坏文件",
+      "occurrence": {
+        "title": "移动重复任务",
+        "description": "只移动“{title}”的这一次，还是全部？",
+        "one": "仅这一次",
+        "all": "全部",
+        "cancel": "取消"
+      },
       "problems": {
         "title": "无法读取此文件",
         "help": "请在其他编辑器中修正：能读取后即可打开，在此之前 Vertex 不会覆盖它。",
@@ -18,7 +25,8 @@
       "views": {
         "types": {
           "list": "列表",
-          "board": "看板"
+          "board": "看板",
+          "calendar": "日历"
         },
         "add": "添加视图",
         "options": "视图选项",
@@ -90,6 +98,11 @@
         "columnName": "列名称",
         "category": "含义",
         "cancel": "取消",
+        "day": "日",
+        "week": "周",
+        "month": "月",
+        "previous": "上一个",
+        "next": "下一个",
         "star": "加星标",
         "unstar": "移除星标",
         "more": "更多",

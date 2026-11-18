@@ -5,16 +5,17 @@
  * tab autosaves what comes back. A file that doesn't parse shows why and is never written. An empty file is a new
  * document, written at once. Text the tab reloads (changed by another program) is read again.
  */
-import {useToast} from '@nuxt/ui/composables'
+import {useOverlay, useToast} from '@nuxt/ui/composables'
 import {type FieldOption, type List, resolveFields, stringify, type Task, type TaskDocument, TasksFormatError, validate, type View} from '@type32/tasks'
-import {moveTask, type Patch, TaskBoard, TaskList, withOption} from '@type32/tasks-ui-components'
+import {type CalendarItem, detachOccurrence, moveTask, type Patch, type Shift, shiftTask, TaskBoard, TaskCalendar, TaskList, withOption} from '@type32/tasks-ui-components'
 import type {SessionContext} from '@type32/vertex-plugin'
 import {ViewerLayout} from '@type32/vertex-plugin/ui'
 import {type Component, computed, onBeforeUnmount, ref, shallowRef, watch} from 'vue'
 import {context, labels, t, timeZone, weekStartsOn} from './context'
 import {read, type RecordOf, withRecord} from './document'
-import ViewBar from './ViewBar.vue'
+import OccurrenceModal from './OccurrenceModal.vue'
 import TaskNotes from './TaskNotes.vue'
+import ViewBar from './ViewBar.vue'
 
 const fileName = defineModel<string>('fileName')
 const content = defineModel<string>({default: ''})
@@ -96,8 +97,20 @@ const createOption = (field: string, option: FieldOption) => doc.value && commit
 // Order isn't synced (the format's rule), so a move stamps nothing.
 const move = (id: string, before: string | undefined) => doc.value && commit(moveTask(doc.value, id, before))
 
+// One time of a repeating task dragged: that one alone (out of the series, a task of its own), or the whole series.
+const askOccurrence = useOverlay().create(OccurrenceModal, {destroyOnClose: true})
+async function moveOccurrence(item: CalendarItem, shift: Shift) {
+    const choice = await askOccurrence.open({title: item.task.title}).result
+    if (!doc.value || !choice) return
+    if (choice === 'all') return changeTask(item.task.id, shiftTask(item.task, shift))
+    const {series, single} = detachOccurrence(item.task, item, shift, now())
+    commit(withRecord(withRecord(doc.value, 'tasks', item.task.id, series, now()), 'tasks', single.id, {}, now(), single))
+}
+// The calendar's own changes (its scale, its lists) are to the view it draws.
+const changeShown = (patch: Patch<View>) => changeView(active.value.id, patch)
+
 /** The view types drawn, by `type`; a view of another type says it isn't drawn yet. */
-const VIEWS: Record<string, Component> = {list: TaskList, board: TaskBoard}
+const VIEWS: Record<string, Component> = {list: TaskList, board: TaskBoard, calendar: TaskCalendar}
 </script>
 
 <template>
@@ -146,6 +159,8 @@ const VIEWS: Record<string, Component> = {list: TaskList, board: TaskBoard}
         @create="createTask"
         @change-list="changeList"
         @create-list="createList"
+        @change-view="changeShown"
+        @move-occurrence="moveOccurrence"
         @change-option="changeOption"
         @create-option="createOption"
         @move="move"

@@ -10,6 +10,13 @@
         "list": "Inbox"
       },
       "refused": "That change would break the file",
+      "occurrence": {
+        "title": "Move a repeating task",
+        "description": "Move only this time of “{title}”, or every time?",
+        "one": "Only this one",
+        "all": "All of them",
+        "cancel": "Cancel"
+      },
       "problems": {
         "title": "This file can't be read",
         "help": "Fix it in another editor: it opens once it reads, and Vertex doesn't write over it until then.",
@@ -18,7 +25,8 @@
       "views": {
         "types": {
           "list": "List",
-          "board": "Board"
+          "board": "Board",
+          "calendar": "Calendar"
         },
         "add": "Add view",
         "options": "View options",
@@ -90,6 +98,11 @@
         "columnName": "Column name",
         "category": "Means",
         "cancel": "Cancel",
+        "day": "Day",
+        "week": "Week",
+        "month": "Month",
+        "previous": "Previous",
+        "next": "Next",
         "star": "Star",
         "unstar": "Remove star",
         "more": "More",
