@@ -192,12 +192,25 @@
         "complete": "完成",
         "reopen": "重新打开",
         "empty": "没有任务",
+        "hours": "小时",
+        "days": "天",
+        "weeks": "周",
+        "months": "月",
+        "reschedule": "重新安排",
+        "tomorrow": "明天",
+        "nextWeek": "下周",
+        "inTwoWeeks": "两周后",
+        "pickDate": "选择日期…",
+        "copyLink": "复制链接",
+        "noColor": "无颜色",
+        "addPerson": "添加人员",
         "fields": {
           "status": "状态",
           "priority": "优先级",
           "tags": "标签",
           "progress": "进度",
-          "location": "地点"
+          "location": "地点",
+          "assignees": "负责人"
         },
         "options": {
           "status": {

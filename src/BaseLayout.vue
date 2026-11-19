@@ -46,6 +46,7 @@ const view = computed((): View => ({
     title: base.view.value.name,
     type: timeline.value ? 'timeline' : 'calendar',
     ...(typeof base.view.value.scale === 'string' && {scale: base.view.value.scale}),
+    ...(typeof base.view.value.zoom === 'number' && {zoom: base.view.value.zoom}),
     updatedAt: '1970-01-01T00:00:00Z',
 }))
 
@@ -60,11 +61,12 @@ function create(task: { start?: string }) {
     const key = noteKey(keys.value.start)
     base.newItem(key !== undefined && task.start ? {key, value: task.start} : undefined)
 }
-// The scale is the base view's own option.
+// The scale and the zoom are the base view's own options.
 function changeView(patch: Partial<View>) {
-    if (typeof patch.scale !== 'string') return
+    const own = {...(typeof patch.scale === 'string' && {scale: patch.scale}), ...(typeof patch.zoom === 'number' && {zoom: patch.zoom})}
+    if (Object.keys(own).length === 0) return
     const name = base.view.value.name
-    base.commit({...base.base.value, views: (base.base.value.views ?? []).map(v => (v.name === name ? {...v, scale: patch.scale} : v))})
+    base.commit({...base.base.value, views: (base.base.value.views ?? []).map(v => (v.name === name ? {...v, ...own} : v))})
 }
 </script>
 

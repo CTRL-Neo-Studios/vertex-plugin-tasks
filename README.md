@@ -15,11 +15,14 @@ A [Vertex](https://github.com/CTRL-Neo-Studios/vertex) plugin for `.task` files,
 - **The Calendar:** a month, a week or a day, each time of a repeating task, at the time zone of the settings; a click
   opens a task, a drag moves it or stretches it, a drag on empty hours (or a double click) makes one; moving one time
   of a repeating task asks whether it's that one or all of them. Lists switched on and off beside it.
-- **The Timeline:** a Gantt: the outline (subtasks under their parent, folding; length, progress) beside bars on a
-  day, week or month scale, moments as diamonds, dues as marks, a parent's stretch, dependency lines and today's line.
-  A bar dragged or stretched moves its task; a line drawn from the dot after a bar to another row makes that task wait
-  for it (one that would make a loop is refused); a right click: Edit, Duplicate, its list (its colour), the
+- **The Timeline:** each task as a coloured bar with its title and its people, a group as a line over its subtasks,
+  beside the outline (a circle to complete each, its duration and progress). Pinch or ⌘-scroll to zoom from months
+  down to hours, or pick Hours, Days, Weeks or Months. Drag a bar to move it (by quarter hours when zoomed in), its end
+  to stretch it, the dot after it to another row to make that task wait for it. Click a bar to select it (⌘D
+  duplicates, ⌫ deletes), double-click to edit; a right click: its colour, Edit, Reschedule, Duplicate, its list, the
   dependencies to remove, Delete.
+- **Colours and people:** a task has a colour of its own (else its list's), shown in every view, and assignees, added
+  in the task's editor and shown as initials.
 - **Views** are the file's (the format's `views`), so other apps of the format show the same ones. Add a view, name
   it, group, sort and hide done tasks in its options.
 - A file is written back in the format it was found in (YAML, JSON or TOML), keeping what the plugin doesn't know. A
