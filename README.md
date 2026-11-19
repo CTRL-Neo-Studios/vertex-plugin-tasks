@@ -51,15 +51,35 @@ Settings: the first day of the week, the time zone that decides which day is tod
 
 Notes' tasks are written with Vertex's frontmatter writer (as Bases writes properties); the body isn't touched.
 
-## Development
+## Install
+
+Settings → Plugins → Install…, and paste `https://github.com/CTRL-Neo-Studios/vertex-plugin-tasks`. It needs a Vertex
+with plugin windows and chat tools (SDK 1.6.0's contract); an older one refuses its manifest.
+
+## What it shows of the plugin API
+
+| | Where | Docs |
+| --- | --- | --- |
+| A file type with New, a viewer that loads its text, an embed | `src/main.ts`, `src/TaskViewer.vue`, `src/TaskEmbed.vue` | [`ctx.files.type`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxfilestype), [`ctx.views.fileViewer`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxviewsfileviewer), [`ctx.editor.embed`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxeditorembed) |
+| A component library of its own, drawn with Vertex's Nuxt UI | `src/TaskFile.vue`, `@type32/tasks-ui-components` | [Nuxt UI](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/ui.md#nuxt-ui), [Dependencies](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/package.md#dependencies) |
+| Links in its files for backlinks and renames | `src/links.ts` | [`ctx.index.linkExtractor`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxindexlinkextractor) |
+| The workspace's tasks from the index and the files, edits as one undo step, frontmatter written as Obsidian does | `src/workspace.ts` | [The index](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/session.md#sessionindexfiles-sessionindexbypath-sessionindexbyuuid), [`session.files.edit`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/session.md#sessionfilesedit), [`vault`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/session.md#sessionfilesvault) |
+| A panel view, an overlay, commands and a palette group | `src/main.ts`, `src/commands.ts`, `src/TasksPanel.vue`, `src/TasksOverlay.vue` | [`ctx.views.panel`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxviewspanel), [`ctx.views.overlay`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxviewsoverlay), [`ctx.commands.register`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxcommandsregister) |
+| An item in Files' menu | `src/main.ts` | [`ctx.files.menuItem`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxfilesmenuitem) |
+| Open and Save dialogs, reading and writing what's picked | `src/commands.ts` (iCalendar) | [`ctx.dialogs`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxdialogsreadtext-ctxdialogswritetext) |
+| Notifications behind a permission, data kept on the device | `src/alerts.ts`, `plugin.json` | [`ctx.notifications.send`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxnotificationssend), [`ctx.data`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/config.md#ctxdataglobal-ctxdataworkspace) |
+| Bases layouts, when Bases runs | `src/main.ts`, `src/BaseLayout.vue` | [`ctx.whenPlugin`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxprovide-ctxuse-ctxwhenplugin) |
+| A window of its own, talking to the workspace's window | `src/tasksWindow.ts`, `src/TasksWindow.vue` | [`ctx.windows`](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxwindowsdefine-ctxwindowsopen-ctxwindowsisopen) |
+| Tools for a chat's model, with previews of what they change | `src/chatTools.ts`, `src/ToolPreview.vue` | [Other plugins](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/context.md#ctxprovide-ctxuse-ctxwhenplugin) |
+| Settings a workspace may change | `plugin.json` | [The schema](https://github.com/CTRL-Neo-Studios/vertex/blob/dev/packages/vertex-plugin/docs/config.md#the-schema) |
+
+## Develop
 
 ```sh
 bun install
-bun run build      # dist/ and plugin.zip
+bun test            # the format's files, notes' tasks, dates, the agenda, alerts, Bases rows, the chat tools' queries
 bun run typecheck
-bun test
+bun run build       # dist/ (with this README) and plugin.zip
 ```
 
-Built with `@type32/vertex-plugin` (Vertex's SDK), `@type32/tasks` and `@type32/tasks-ui-components`. Until their next
-releases, the SDK and the components come from the folders beside this one (`file:` in `package.json`, copied on
-install: `rm -rf node_modules/@type32/tasks-ui-components && bun install` after rebuilding one).
+Install `dist/` in Vertex (Settings → Plugins → Install… ▾ → From a folder) and run `bunx vite build --watch`.
