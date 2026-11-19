@@ -22,11 +22,29 @@ export interface UpdateInput {
     due?: string | null
 }
 
+export interface AddInput {
+    title?: string
+    do?: string
+    due?: string
+    notes?: string
+}
+
 /** Whether `file` (a workspace-relative path, or a file's name with or without its extension) names the entry's file. */
 export function inFile(entry: WorkspaceTask, file: string) {
     const asked = file.trim().replace(/\\/g, '/').replace(/^\/+/, '')
     const name = entry.path.slice(entry.path.lastIndexOf('/') + 1)
     return entry.path === asked || name === asked || name.replace(/\.(md|task)$/i, '') === asked
+}
+
+/** The task `id` in `file` (its path or name), as `tasks_list` gives them; for `tasks_update` and `tasks_delete`. */
+export const findEntry = (entries: readonly WorkspaceTask[], input: { file: string, id: string }) =>
+    entries.find(e => e.task.id === input.id && inFile(e, input.file))
+
+/** `tasks_add`'s task: its title (trimmed; throws when there's none), Do, Due and notes. */
+export function addedFields(input: AddInput) {
+    const title = input.title?.trim()
+    if (!title) throw new Error('A task needs a title.')
+    return {title, start: input.do, due: input.due, notes: input.notes}
 }
 
 /**

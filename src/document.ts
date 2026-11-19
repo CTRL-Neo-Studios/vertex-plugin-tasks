@@ -1,4 +1,4 @@
-import {type Format, type Issue, parse, type List, type Task, type TaskDocument, TasksFormatError, validate, type View} from '@type32/tasks'
+import {type Format, type Issue, parse, type List, resolveFields, stringify, type Task, type TaskDocument, TasksFormatError, validate, type View} from '@type32/tasks'
 import {applyPatch, type Patch} from '@type32/tasks-ui-components'
 
 /**
@@ -61,6 +61,21 @@ export function withRecord<C extends Collection>(doc: TaskDocument, collection: 
         ? [...records, applyPatch((added ?? patch) as RecordOf<C>, patch, now)]
         : records.map((r, i) => (i === at ? applyPatch(r, patch, now) : r))
     return {...doc, [collection]: next}
+}
+
+/**
+ * `text` (a `.task` file's, `''` for a new one) with a new task in its first list: the text to write, the task, its
+ * list and the document's fields. A new document is made as New Task List makes one (`names`). Throws
+ * `TasksFormatError` for a file that doesn't read or a task that doesn't validate.
+ */
+export function withNewTask(text: string, fields: Pick<Task, 'title' | 'start' | 'due' | 'notes'>, names: NewNames, now: string) {
+    const current = read(text, names, now)
+    if (!('doc' in current)) throw new TasksFormatError(current.issues)
+    const list = current.doc.lists?.find(l => !l.deletedAt)
+    const given = Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== undefined)) as typeof fields
+    const task: Task = {id: crypto.randomUUID(), ...given, ...(list && {listId: list.id}), updatedAt: now}
+    const doc = withRecord(current.doc, 'tasks', task.id, {}, now, task)
+    return {text: stringify(doc, current.format), task, list, fields: resolveFields(doc)}
 }
 
 /**

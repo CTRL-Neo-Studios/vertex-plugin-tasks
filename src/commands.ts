@@ -2,7 +2,7 @@ import {today as todayIn} from '@internationalized/date'
 import {fromICS, isOpen, isOverdue, merge, parse, stringify, type Task, TasksFormatError, toICS} from '@type32/tasks'
 import {dayOf, formatTime} from '@type32/tasks-ui-components'
 import type {PluginContext, SessionContext} from '@type32/vertex-plugin'
-import {type Config, t, timeZone} from './context'
+import {type Config, newNames, t, timeZone} from './context'
 import {read, sniff} from './document'
 import {prompt} from './prompts'
 import {makeNoteTask, openTask, workspaceTasks} from './workspace'
@@ -83,7 +83,7 @@ export function registerCommands(ctx: PluginContext<Config>, current: () => Sess
                 const imported = fromICS(await ctx.dialogs.readText(path))
                 const text = await session.files.vault().read(file.relativePath)
                 const format = sniff(text)
-                const before = read(text, {list: t('newFile.list'), listView: t('views.types.list'), boardView: t('views.types.board')}, now())
+                const before = read(text, newNames(), now())
                 if (!('doc' in before)) throw new TasksFormatError(before.issues)
                 const {document} = merge(before.doc, imported.document)
                 await session.files.edit([{uuid: file.uuid, text: stringify(document, format)}], t('commands.import'))

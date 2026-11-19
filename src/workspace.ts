@@ -1,11 +1,11 @@
 import {frontmatterRange} from '@type32/codemirror-rich-obsidian-editor'
-import {type Fields, parse, resolveFields, stringify, type Task, type TaskDocument, TasksFormatError} from '@type32/tasks'
+import {type Fields, parse, resolveFields, stringify, type Task, type TaskDocument} from '@type32/tasks'
 import {applyPatch, type TaskPatch, toggleDone} from '@type32/tasks-ui-components'
 import type {SessionContext} from '@type32/vertex-plugin'
-import {obsidianYaml, setFrontmatterProperty} from '@type32/vertex-plugin/vault'
+import {obsidianYaml, removeFrontmatterProperty, setFrontmatterProperty} from '@type32/vertex-plugin/vault'
 import {computed, type ComputedRef, effectScope, shallowRef, toRaw, watch} from 'vue'
-import {t} from './context'
-import {checkNoteTask, noteTask, read, sniff, withRecord} from './document'
+import {newNames, t} from './context'
+import {checkNoteTask, noteTask, sniff, withNewTask, withRecord} from './document'
 
 /** A task of the workspace: in a note's frontmatter (`note`), or in a `.task` file. */
 export interface WorkspaceTask {
@@ -24,6 +24,11 @@ export interface WorkspaceTasks {
     entries: ComputedRef<WorkspaceTask[]>
     /** Writes a change to the file holding the task, as one step of Files' undo. Throws when the file wouldn't validate. */
     change(entry: WorkspaceTask, patch: TaskPatch): Promise<void>
+    /**
+     * Deletes the task, as one step of Files' undo: a `.task` file's gets its `deletedAt` (the format's tombstone, as
+     * the list's Delete does); a note's `task:` is taken out of its frontmatter, the note kept.
+     */
+    remove(entry: WorkspaceTask): Promise<void>
 }
 
 const yaml = obsidianYaml(frontmatterRange)
@@ -64,26 +69,18 @@ export async function makeNoteTask(session: SessionContext, file: { uuid: string
 }
 
 /**
- * A new task in the `.task` file at `path` (workspace-relative), in its first list; the file made when it's missing (a
- * new document, as New Task List makes), once the task validates. Throws `TasksFormatError` for a file that doesn't
- * read or a task that doesn't validate. Its file's uuid, and the task.
+ * A new task in the `.task` file at `path` (workspace-relative), in its first list (`withNewTask`); the file made when
+ * it's missing, once the task validates. Its file's uuid, and the task.
  */
 export async function addTask(session: SessionContext, path: string, fields: Pick<Task, 'title' | 'start' | 'due' | 'notes'>) {
-    const now = new Date().toISOString()
     let file = session.index.files().find(f => !f.isFolder && f.relativePath === path)
-    const text = file ? await session.files.vault().read(path) : ''
-    const current = read(text, {list: t('newFile.list'), listView: t('views.types.list'), boardView: t('views.types.board')}, now)
-    if (!('doc' in current)) throw new TasksFormatError(current.issues)
-    const listId = current.doc.lists?.find(l => !l.deletedAt)?.id
-    const given = Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== undefined)) as typeof fields
-    const task: Task = {id: crypto.randomUUID(), ...given, ...(listId !== undefined && {listId}), updatedAt: now}
-    const next = stringify(withRecord(current.doc, 'tasks', task.id, {}, now, task), current.format)
+    const {text, task} = withNewTask(file ? await session.files.vault().read(path) : '', fields, newNames(), new Date().toISOString())
     if (!file) {
         const slash = path.lastIndexOf('/')
         file = await session.files.create(slash === -1 ? '' : path.slice(0, slash), path.slice(slash + 1))
         if (!file) throw new Error(t('commands.cantCreate', {path}))
     }
-    await session.files.edit([{uuid: file.uuid, text: next}], t('commands.newTask'))
+    await session.files.edit([{uuid: file.uuid, text}], t('commands.newTask'))
     return {uuid: file.uuid, task}
 }
 
@@ -168,5 +165,17 @@ function create(session: SessionContext): WorkspaceTasks {
         await session.files.edit([{uuid: entry.uuid, text: next}], t('workspace.edit', {title: entry.task.title}))
     }
 
-    return {entries, change}
+    async function remove(entry: WorkspaceTask) {
+        const now = new Date().toISOString()
+        const text = await session.files.vault().read(entry.path)
+        let next: string
+        if (entry.note) next = removeFrontmatterProperty(text, 'task', yaml)
+        else {
+            const format = sniff(text)
+            next = stringify(withRecord(parse(text, format), 'tasks', entry.task.id, {deletedAt: now}, now), format)
+        }
+        await session.files.edit([{uuid: entry.uuid, text: next}], t('workspace.remove', {title: entry.task.title}))
+    }
+
+    return {entries, change, remove}
 }

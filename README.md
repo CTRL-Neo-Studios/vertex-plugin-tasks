@@ -30,7 +30,8 @@ A [Vertex](https://github.com/CTRL-Neo-Studios/vertex) plugin for `.task` files,
 - **The Tasks window** (palette: Open Tasks in a window): the panel's list in a small window of its own, which can be
   kept on top. It reaches nothing of the workspace itself: ticks and clicks there are done by the workspace's window.
 - **In a chat** (with Chat on): the model can list the workspace's tasks (by text, file or dates), and in Suggest or
-  Write mode add one to the inbox file or complete, rename or reschedule one, each after you approve it.
+  Write mode add one to the inbox file, complete, rename or reschedule one, or delete one, each after you approve it.
+  Before you do, the chat shows the task as it will be added, before and after the change, or the task that goes.
 - **A calendar can show the workspace's tasks** (its options): the notes' and the other files' tasks beside its own,
   each edit written to the file it's in.
 - **`![[file.task]]`** in a note draws the file's first view, and works.

@@ -2,6 +2,7 @@ import {getLocalTimeZone} from '@internationalized/date'
 import {defaultLabels, type TaskLabels} from '@type32/tasks-ui-components'
 import type {PluginContext} from '@type32/vertex-plugin'
 import {computed} from 'vue'
+import type {NewNames} from './document'
 
 export interface Config {
     /** `auto`: the language's. */
@@ -28,6 +29,9 @@ export function context(): PluginContext<Config> {
 
 /** A string of the plugin's (`plugins.tasks.<key>`). */
 export const t = (key: string, params?: Record<string, unknown>) => context().i18n.t(`plugins.tasks.${key}`, params)
+
+/** A new `.task` file's list and views, named in the window's language. */
+export const newNames = (): NewNames => ({list: t('newFile.list'), listView: t('views.types.list'), boardView: t('views.types.board')})
 
 /** The components' strings in the window's language: `plugins.tasks.ui.*`, one per key of theirs. */
 export const labels = computed((): TaskLabels => {

@@ -1,7 +1,24 @@
-import type {ChatApi, PluginContext} from '@type32/vertex-plugin'
+import type {ChatApi, ChatToolPreviewProps, PluginContext, SessionContext} from '@type32/vertex-plugin'
+import {h} from 'vue'
 import {type Config, inboxPath, timeZone} from './context'
-import {inFile, listTasks, type ListInput, updatePatch, type UpdateInput} from './taskQuery'
+import {addedFields, type AddInput, findEntry, listTasks, type ListInput, updatePatch, type UpdateInput} from './taskQuery'
 import {addTask, workspaceTasks} from './workspace'
+
+/** `ToolPreview` for one tool, as a chat draws a preview: with the call's `input` and `session`. */
+const previewOf = (kind: 'add' | 'update' | 'delete') => ({
+    component: async () => {
+        const {default: ToolPreview} = await import('./ToolPreview.vue')
+        return {default: (props: ChatToolPreviewProps) => h(ToolPreview, {...props, kind})}
+    },
+})
+
+/** The task a `tasks_update` or `tasks_delete` names; throws, for the model, when there's none. */
+function entryFor(session: SessionContext, input: { file: string, id: string }) {
+    const store = workspaceTasks(session)
+    const entry = findEntry(store.entries.value, input)
+    if (!entry) throw new Error(`There's no task "${input.id}" in "${input.file}". Use tasks_list for its file and id.`)
+    return {store, entry}
+}
 
 const TIME = {type: 'string', pattern: '^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2})?)?$'}
 const DAY = {type: 'string', pattern: '^\\d{4}-\\d{2}-\\d{2}$'}
@@ -35,6 +52,7 @@ export function registerChatTools(ctx: PluginContext<Config>, chat: ChatApi) {
         description: 'Add a task to the user\'s inbox task file (made if missing), with a Do date (when to do it) and a '
             + 'Due date (its deadline), both optional. ' + DATES,
         writes: true,
+        preview: previewOf('add'),
         inputSchema: {
             type: 'object',
             properties: {
@@ -47,11 +65,9 @@ export function registerChatTools(ctx: PluginContext<Config>, chat: ChatApi) {
             additionalProperties: false,
         },
         execute: async (input, {session}) => {
-            const {title, do: start, due, notes} = input as { title: string, do?: string, due?: string, notes?: string }
-            if (!title?.trim()) throw new Error('A task needs a title.')
             const file = inboxPath()
-            const {task} = await addTask(session, file, {title: title.trim(), start, due, notes})
-            return {added: {file, id: task.id, title: task.title, ...(start && {do: start}), ...(due && {due})}}
+            const {task} = await addTask(session, file, addedFields(input as AddInput))
+            return {added: {file, id: task.id, title: task.title, ...(task.start && {do: task.start}), ...(task.due && {due: task.due})}}
         },
     })
     chat.registerTool(ctx.plugin, {
@@ -61,6 +77,7 @@ export function registerChatTools(ctx: PluginContext<Config>, chat: ChatApi) {
             + 'one moves to its next time) or reopen it, rename it, move its Do date or its Due date, or clear one with '
             + 'null. ' + DATES,
         writes: true,
+        preview: previewOf('update'),
         inputSchema: {
             type: 'object',
             properties: {
@@ -75,14 +92,34 @@ export function registerChatTools(ctx: PluginContext<Config>, chat: ChatApi) {
             additionalProperties: false,
         },
         execute: async (input, {session}) => {
-            const asked = input as UpdateInput
-            const store = workspaceTasks(session)
-            const entry = store.entries.value.find(e => e.task.id === asked.id && inFile(e, asked.file))
-            if (!entry) throw new Error(`There's no task "${asked.id}" in "${asked.file}". Use tasks_list for its file and id.`)
-            const patch = updatePatch(entry, asked, new Date().toISOString())
+            const {store, entry} = entryFor(session, input as UpdateInput)
+            const patch = updatePatch(entry, input as UpdateInput, new Date().toISOString())
             if (Object.keys(patch).length === 0) return {unchanged: true}
             await store.change(entry, patch)
             return {updated: {file: entry.path, id: entry.task.id}}
+        },
+    })
+    chat.registerTool(ctx.plugin, {
+        name: 'delete',
+        label: 'plugins.tasks.tools.delete',
+        description: 'Delete one of the user\'s tasks, found with tasks_list (its file and id). A .task file keeps it as '
+            + 'deleted (so its synced copies learn of it); a note that is a task stays, only its task is taken out of '
+            + 'its frontmatter. To finish a task, complete it with tasks_update instead.',
+        writes: true,
+        preview: previewOf('delete'),
+        inputSchema: {
+            type: 'object',
+            properties: {
+                file: {type: 'string', description: 'The task\'s file, as tasks_list gives it.'},
+                id: {type: 'string', description: 'The task\'s id, as tasks_list gives it.'},
+            },
+            required: ['file', 'id'],
+            additionalProperties: false,
+        },
+        execute: async (input, {session}) => {
+            const {store, entry} = entryFor(session, input as { file: string, id: string })
+            await store.remove(entry)
+            return {deleted: {file: entry.path, id: entry.task.id, title: entry.task.title}}
         },
     })
 }

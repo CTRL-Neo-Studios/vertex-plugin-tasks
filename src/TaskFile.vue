@@ -12,7 +12,7 @@ import {type FieldOption, type List, resolveFields, stringify, type Task, type T
 import {type CalendarItem, detachOccurrence, moveTask, type Patch, type Shift, shiftTask, TaskBoard, TaskCalendar, TaskList, TaskTimeline, withOption} from '@type32/tasks-ui-components'
 import type {SessionContext} from '@type32/vertex-plugin'
 import {type Component, computed, nextTick, onBeforeUnmount, ref, shallowRef, useTemplateRef, watch} from 'vue'
-import {context, labels, t, timeZone, weekStartsOn} from './context'
+import {context, labels, newNames, t, timeZone, weekStartsOn} from './context'
 import {read, type RecordOf, withRecord} from './document'
 import OccurrenceModal from './OccurrenceModal.vue'
 import TaskNotes from './TaskNotes.vue'
@@ -32,11 +32,10 @@ const props = defineProps<{
 const ctx = context()
 const toast = useToast()
 const now = () => new Date().toISOString()
-const names = () => ({list: t('newFile.list'), listView: t('views.types.list'), boardView: t('views.types.board')})
 
 // Text ↔ document. `written` is the last text this produced, so its own saves aren't read back.
 let written = content.value
-const state = shallowRef(read(content.value, names(), now()))
+const state = shallowRef(read(content.value, newNames(), now()))
 const doc = computed(() => ('doc' in state.value ? state.value.doc : undefined))
 const issues = computed(() => ('issues' in state.value ? state.value.issues : []))
 
@@ -56,7 +55,7 @@ watch(content, (text) => {
     written = text
     clearTimeout(pending)
     pending = undefined
-    state.value = read(text, names(), now())
+    state.value = read(text, newNames(), now())
 })
 
 function refuse(error: unknown) {

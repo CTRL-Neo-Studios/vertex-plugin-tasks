@@ -33,11 +33,11 @@ async function toggleTop() {
 <template>
   <div class="tw:flex tw:h-full tw:min-h-0 tw:flex-col" data-tasks-window>
     <div class="tw:flex tw:justify-end tw:px-2">
-      <UButton
+      <UToggle
+        :model-value="onTop"
         :icon="onTop ? 'i-lucide-pin-off' : 'i-lucide-pin'"
         size="xs"
-        variant="ghost"
-        :color="onTop ? 'primary' : 'neutral'"
+        active-variant="ghost"
         :title="t(onTop ? 'window.unpin' : 'window.pin')"
         data-tasks-pin
         @click="toggleTop"

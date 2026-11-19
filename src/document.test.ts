@@ -2,7 +2,7 @@ import {expect, test} from 'bun:test'
 import {parse, stringify, validate} from '@type32/tasks'
 import {defaultLabels} from '@type32/tasks-ui-components'
 import en from '../locales/en.json'
-import {noteTask, read, sniff, withRecord} from './document'
+import {noteTask, read, sniff, withNewTask, withRecord} from './document'
 
 const at = '2026-11-18T10:00:00Z'
 const names = {list: 'Inbox', listView: 'List', boardView: 'Board'}
@@ -46,6 +46,19 @@ test('withRecord changes a record, stamps it, and adds one it lacks', () => {
     expect(withRecord(doc, 'tasks', 'a', {due: undefined}, later).tasks).toEqual([{id: 'a', title: 'A', updatedAt: later}])
     const added = withRecord(doc, 'views', 'v', {groupBy: 'starred'}, later, {id: 'v', title: 'List', type: 'list', updatedAt: at})
     expect(added.views).toEqual([{id: 'v', title: 'List', type: 'list', groupBy: 'starred', updatedAt: later}])
+})
+
+test('withNewTask writes the task it gives back, in the first list, and makes a missing file first', () => {
+    const fields = {title: 'Call Ann', start: '2026-11-19T09:00', due: undefined, notes: 'About the venue'}
+    const made = withNewTask('', fields, names, at)
+    const written = parse(made.text, 'yaml')
+    expect(written.tasks).toEqual([made.task])
+    expect(made.task).toMatchObject({title: 'Call Ann', start: '2026-11-19T09:00', notes: 'About the venue', listId: made.list!.id})
+    expect('due' in made.task).toBe(false)
+    expect(made.list!.title).toBe('Inbox')
+    const next = withNewTask(made.text, {title: 'Second'}, names, at)
+    expect(parse(next.text, 'yaml').tasks.map(t => t.title)).toEqual(['Call Ann', 'Second'])
+    expect(() => withNewTask('', {title: 'Bad', due: '2026-13-40'}, names, at)).toThrow()
 })
 
 test("en.json has every string the components show", () => {

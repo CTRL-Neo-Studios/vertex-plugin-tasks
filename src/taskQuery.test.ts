@@ -1,6 +1,6 @@
 import {expect, test} from 'bun:test'
 import {resolveFields, type Task} from '@type32/tasks'
-import {listTasks, updatePatch} from './taskQuery'
+import {addedFields, findEntry, listTasks, updatePatch} from './taskQuery'
 import type {WorkspaceTask} from './workspace'
 
 const fields = resolveFields({})
@@ -39,4 +39,12 @@ test('an update completes only what is open, reopens only what is done, and move
     expect(updatePatch(call, {file: '', id: 'b', do: '2026-05-13'}, at)).toMatchObject({start: '2026-05-13T09:00'})
     expect(updatePatch(call, {file: '', id: 'b', do: '2026-05-13T15:30'}, at)).toMatchObject({start: '2026-05-13T15:30'})
     expect(updatePatch(brief, {file: '', id: 'a', due: null, title: ' Brief '}, at)).toEqual({due: undefined, title: 'Brief'})
+})
+
+test('a task is found by its id in a file named by path or name, and an added task needs a title', () => {
+    expect(findEntry(entries, {file: 'Plan', id: 'b'})?.task.title).toBe('Call Ann')
+    expect(findEntry(entries, {file: 'Notes/Taxes.md', id: 'e'})?.note).toBe(true)
+    expect(findEntry(entries, {file: 'Home.task', id: 'b'})).toBeUndefined()
+    expect(addedFields({title: ' Call Ann ', do: '2026-05-12T09:00'})).toEqual({title: 'Call Ann', start: '2026-05-12T09:00', due: undefined, notes: undefined})
+    expect(() => addedFields({title: '  '})).toThrow(/title/)
 })

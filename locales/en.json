@@ -42,7 +42,16 @@
       "tools": {
         "list": "List tasks",
         "add": "Add a task",
-        "update": "Change a task"
+        "update": "Change a task",
+        "delete": "Delete a task",
+        "preview": {
+          "adds": "Adds to {file}:",
+          "changes": "Changes in {file}:",
+          "unchanged": "Nothing in {file} would change.",
+          "deletes": "Deletes from {file}:",
+          "deletesNote": "Takes the task out of {file}; the note stays:",
+          "notFound": "There's no task {id} in {file}."
+        }
       },
       "bases": {
         "calendar": "Calendar (Tasks)",
@@ -64,6 +73,7 @@
       },
       "workspace": {
         "edit": "Edit “{title}”",
+        "remove": "Delete “{title}”",
         "openIn": "Open in {path}"
       },
       "embed": {
