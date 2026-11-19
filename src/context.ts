@@ -42,6 +42,9 @@ export const labels = computed((): TaskLabels => {
     }
 })
 
+/** Where New task… and the chat's tasks_add put a task: the `inbox` setting, else `Inbox.task`. */
+export const inboxPath = () => context().config.value.inbox.trim() || 'Inbox.task'
+
 /** The viewer's zone: the setting's when it's a zone, else the system's. */
 export const timeZone = computed(() => {
     const zone = context().config.value.timeZone.trim()

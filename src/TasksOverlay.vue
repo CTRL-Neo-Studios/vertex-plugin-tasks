@@ -6,15 +6,14 @@
 import {useToast} from '@nuxt/ui/composables'
 import type {SessionContext} from '@type32/vertex-plugin'
 import {computed, ref, watch} from 'vue'
-import {context, t} from './context'
+import {inboxPath, t} from './context'
 import {prompt} from './prompts'
 import {addTask} from './workspace'
 
 const props = defineProps<{ session: SessionContext }>()
-const ctx = context()
 const toast = useToast()
 
-const inbox = computed(() => ctx.config.value.inbox.trim() || 'Inbox.task')
+const inbox = computed(inboxPath)
 const title = ref('')
 const newTask = computed({
     get: () => prompt.value?.kind === 'newTask',
@@ -41,7 +40,7 @@ async function add() {
     const text = title.value.trim()
     if (!text) return
     try {
-        const uuid = await addTask(props.session, inbox.value, text)
+        const {uuid} = await addTask(props.session, inbox.value, {title: text})
         prompt.value = {kind: 'notice', title: t('commands.added', {title: text, file: inbox.value}), open: uuid}
     } catch (error) {
         prompt.value = {kind: 'notice', title: t('commands.addFailed'), description: error instanceof Error ? error.message : String(error), error: true}

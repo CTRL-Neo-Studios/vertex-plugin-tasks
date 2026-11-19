@@ -39,6 +39,11 @@
         "pin": "Keep on top",
         "unpin": "Don't keep on top"
       },
+      "tools": {
+        "list": "List tasks",
+        "add": "Add a task",
+        "update": "Change a task"
+      },
       "bases": {
         "calendar": "Calendar (Tasks)",
         "timeline": "Timeline (Tasks)",

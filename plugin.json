@@ -7,7 +7,7 @@
   "author": "CTRL Neo Studios",
   "repository": "https://github.com/CTRL-Neo-Studios/vertex-plugin-tasks",
   "apiVersion": 1,
-  "requires": ["bases?"],
+  "requires": ["bases?", "chat?"],
   "permissions": ["notifications"],
   "ownWindows": [{"id": "list", "width": 360, "height": 560, "minWidth": 280, "minHeight": 300}],
   "config": {

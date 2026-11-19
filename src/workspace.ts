@@ -65,24 +65,26 @@ export async function makeNoteTask(session: SessionContext, file: { uuid: string
 
 /**
  * A new task in the `.task` file at `path` (workspace-relative), in its first list; the file made when it's missing (a
- * new document, as New Task List makes). Throws `TasksFormatError` for a file that doesn't read. Its uuid.
+ * new document, as New Task List makes), once the task validates. Throws `TasksFormatError` for a file that doesn't
+ * read or a task that doesn't validate. Its file's uuid, and the task.
  */
-export async function addTask(session: SessionContext, path: string, title: string) {
+export async function addTask(session: SessionContext, path: string, fields: Pick<Task, 'title' | 'start' | 'due' | 'notes'>) {
     const now = new Date().toISOString()
     let file = session.index.files().find(f => !f.isFolder && f.relativePath === path)
+    const text = file ? await session.files.vault().read(path) : ''
+    const current = read(text, {list: t('newFile.list'), listView: t('views.types.list'), boardView: t('views.types.board')}, now)
+    if (!('doc' in current)) throw new TasksFormatError(current.issues)
+    const listId = current.doc.lists?.find(l => !l.deletedAt)?.id
+    const given = Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== undefined)) as typeof fields
+    const task: Task = {id: crypto.randomUUID(), ...given, ...(listId !== undefined && {listId}), updatedAt: now}
+    const next = stringify(withRecord(current.doc, 'tasks', task.id, {}, now, task), current.format)
     if (!file) {
         const slash = path.lastIndexOf('/')
         file = await session.files.create(slash === -1 ? '' : path.slice(0, slash), path.slice(slash + 1))
         if (!file) throw new Error(t('commands.cantCreate', {path}))
     }
-    const text = await session.files.vault().read(path)
-    const current = read(text, {list: t('newFile.list'), listView: t('views.types.list'), boardView: t('views.types.board')}, now)
-    if (!('doc' in current)) throw new TasksFormatError(current.issues)
-    const listId = current.doc.lists?.find(l => !l.deletedAt)?.id
-    const task: Task = {id: crypto.randomUUID(), title, ...(listId !== undefined && {listId}), updatedAt: now}
-    const next = withRecord(current.doc, 'tasks', task.id, {}, now, task)
-    await session.files.edit([{uuid: file.uuid, text: stringify(next, current.format)}], t('commands.newTask'))
-    return file.uuid
+    await session.files.edit([{uuid: file.uuid, text: next}], t('commands.newTask'))
+    return {uuid: file.uuid, task}
 }
 
 /**

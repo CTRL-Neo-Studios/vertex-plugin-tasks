@@ -1,6 +1,7 @@
 import {definePlugin, type SessionContext} from '@type32/vertex-plugin'
 import '@type32/tasks-ui-components/style.css'
 import {watchAlerts} from './alerts'
+import {registerChatTools} from './chatTools'
 import {registerCommands} from './commands'
 import {type Config, setContext} from './context'
 import {rewriteTaskLinks, taskLinkTargets} from './links'
@@ -72,6 +73,8 @@ export default definePlugin<Config>({
                 component: () => import('./BaseLayout.vue'),
             })
         })
+        // With Chat on: tools for a chat's model to list the workspace's tasks, add one and change one.
+        ctx.whenPlugin('chat', chat => registerChatTools(ctx, chat))
 
         // This window's session: the commands' and the Files menu's, and the alerts' workspace.
         let session: SessionContext | undefined
