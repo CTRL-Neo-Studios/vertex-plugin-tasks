@@ -10,10 +10,10 @@
   "dependencies": {
     "@internationalized/date": "^3.12.4",
     "@type32/tasks": "^0.2.0",
-    "@type32/tasks-ui-components": "file:../tasks-ui-components"
+    "@type32/tasks-ui-components": "^0.1.0"
   },
   "devDependencies": {
-    "@type32/vertex-plugin": "file:../vertex/packages/vertex-plugin",
+    "@type32/vertex-plugin": "^1.6.0",
     "@types/bun": "^1.3.0",
     "@vitejs/plugin-vue": "^6.0.0",
     "typescript": "^6.0.3",
