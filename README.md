@@ -29,6 +29,8 @@ A [Vertex](https://github.com/CTRL-Neo-Studios/vertex) plugin for `.task` files,
   one to open its note, or its file at that task.
 - **The Tasks window** (palette: Open Tasks in a window): the panel's list in a small window of its own, which can be
   kept on top. It reaches nothing of the workspace itself: ticks and clicks there are done by the workspace's window.
+- **With [Furball](https://github.com/Type-32/vertex-plugin-furball) on:** its kitty holds up what's overdue and due
+  today; click it for the list, tick one there to complete it. An alert makes it jump and hold that task up.
 - **In a chat** (with Chat on): the model can list the workspace's tasks (by text, file or dates), and in Suggest or
   Write mode add one to the inbox file, complete, rename or reschedule one, or delete one, each after you approve it.
   Before you do, the chat shows the task as it will be added, before and after the change, or the task that goes.

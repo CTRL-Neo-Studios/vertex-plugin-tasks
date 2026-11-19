@@ -1,8 +1,10 @@
 import {definePlugin, type SessionContext} from '@type32/vertex-plugin'
+import {getCurrentScope} from 'vue'
 import '@type32/tasks-ui-components/style.css'
 import {watchAlerts} from './alerts'
 import {registerChatTools} from './chatTools'
 import {registerCommands} from './commands'
+import {feedFurball} from './furball'
 import {type Config, setContext} from './context'
 import {rewriteTaskLinks, taskLinkTargets} from './links'
 import './style.css'
@@ -81,6 +83,9 @@ export default definePlugin<Config>({
         ctx.onSession((s) => {
             session = s
             watchAlerts(ctx, s)
+            // With Furball on: its kitty holds up and lists what's due (in this session's scope, whenever it starts).
+            const scope = getCurrentScope()
+            ctx.whenPlugin('furball', furball => scope?.run(() => feedFurball(ctx, s, furball)))
         })
         registerCommands(ctx, () => session)
         // A note's menu in Files: Make this note a task (a `task:` titled as the note, its body untouched).

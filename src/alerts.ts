@@ -34,6 +34,8 @@ export function watchAlerts(ctx: PluginContext<Config>, session: SessionContext)
                 title: d.entry.task.title,
                 body: t('alerts.due', {time: formatTime(d.due, ctx.i18n.locale, today(zone)), file: d.entry.path}),
             }).catch((error: unknown) => console.error('[tasks] alert:', error))
+            // With Furball on, its kitty startles and holds the task up too.
+            ctx.use('furball')?.nudge(d.entry.task.title)
         }
     }
     // The first look once the `.task` files have been read. `onSession` runs this in the session's scope, which ends
