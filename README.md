@@ -15,12 +15,14 @@ A [Vertex](https://github.com/CTRL-Neo-Studios/vertex) plugin for `.task` files,
 - **The Calendar:** a month, a week or a day, each time of a repeating task, at the time zone of the settings; a click
   opens a task, a drag moves it or stretches it, a drag on empty hours (or a double click) makes one; moving one time
   of a repeating task asks whether it's that one or all of them. Lists switched on and off beside it.
-- **The Timeline:** each task as a coloured bar with its title and its people, a group as a line over its subtasks,
-  beside the outline (a circle to complete each, its duration and progress). Pinch or ⌘-scroll to zoom from months
-  down to hours, or pick Hours, Days, Weeks or Months. Drag a bar to move it (by quarter hours when zoomed in), its end
-  to stretch it, the dot after it to another row to make that task wait for it. Click a bar to select it (⌘D
-  duplicates, ⌫ deletes), double-click to edit; a right click: its colour, Edit, Reschedule, Duplicate, its list, the
-  dependencies to remove, Delete.
+- **The Timeline:** every task with a date as a coloured bar with its title and its people (Do to Due, or one day for
+  a date alone), a group as a line over its subtasks, beside the outline (a circle to complete each, its duration and
+  progress or status). Pinch or ⌘-scroll to zoom from months down to hours, or pick Hours, Days, Weeks or Months. Drag
+  a bar to move it (by quarter hours when zoomed in), its left end to change its Do, its right end its Due (or end), a
+  group's line to move its subtasks, across an undated task's row to give it dates, the dot after a bar to another row
+  to make that task wait for it. Click a bar to select it (⌘D duplicates, ⌫ deletes), double-click to edit; a right
+  click: its colour, Edit, Reschedule, Duplicate, its list, the dependencies to remove, Delete. Hover anything for
+  what it does.
 - **Colours and people:** a task has a colour of its own (else its list's), shown in every view, and assignees, added
   in the task's editor and shown as initials.
 - **Views** are the file's (the format's `views`), so other apps of the format show the same ones. Add a view, name

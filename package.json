@@ -10,7 +10,7 @@
   "dependencies": {
     "@internationalized/date": "^3.12.4",
     "@type32/tasks": "^0.3.0",
-    "@type32/tasks-ui-components": "^0.3.0"
+    "@type32/tasks-ui-components": "file:../tasks-ui-components"
   },
   "devDependencies": {
     "@type32/vertex-plugin": "^1.6.1",
