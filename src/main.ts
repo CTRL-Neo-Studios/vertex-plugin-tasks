@@ -49,6 +49,8 @@ export default definePlugin<Config>({
             id: 'tasks',
             component: () => import('./TasksOverlay.vue'),
         })
+        // The Tasks window: the agenda beside the workspace, fed by the session window that opens it (`tasksWindow.ts`).
+        ctx.windows.define({id: 'list', component: () => import('./TasksWindow.vue')})
 
         // With Bases on: the Calendar and the Timeline as layouts of a base, timed by properties the view names.
         const times = ['start', 'end', 'due'].map(key => ({key, label: `plugins.tasks.bases.${key}`, kind: 'property' as const}))

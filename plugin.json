@@ -9,6 +9,7 @@
   "apiVersion": 1,
   "requires": ["bases?"],
   "permissions": ["notifications"],
+  "ownWindows": [{"id": "list", "width": 360, "height": 560, "minWidth": 280, "minHeight": 300}],
   "config": {
     "overridable": {
       "weekStart": "workspace",

@@ -28,10 +28,16 @@
         "nothingDropped": "全部已导入。",
         "export": "导出为 iCalendar…",
         "exportFailed": "无法导出任务",
-        "exported": "已导出到 {path}"
+        "exported": "已导出到 {path}",
+        "openWindow": "在窗口中打开任务"
       },
       "palette": {
         "group": "任务"
+      },
+      "window": {
+        "title": "任务",
+        "pin": "保持在最前",
+        "unpin": "取消保持在最前"
       },
       "bases": {
         "calendar": "日历（任务）",

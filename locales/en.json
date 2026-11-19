@@ -28,10 +28,16 @@
         "nothingDropped": "Everything was imported.",
         "export": "Export to iCalendar…",
         "exportFailed": "Couldn't export the tasks",
-        "exported": "Exported to {path}"
+        "exported": "Exported to {path}",
+        "openWindow": "Open Tasks in a window"
       },
       "palette": {
         "group": "Tasks"
+      },
+      "window": {
+        "title": "Tasks",
+        "pin": "Keep on top",
+        "unpin": "Don't keep on top"
       },
       "bases": {
         "calendar": "Calendar (Tasks)",

@@ -6,6 +6,7 @@ import {type Config, t, timeZone} from './context'
 import {read, sniff} from './document'
 import {prompt} from './prompts'
 import {makeNoteTask, openTask, workspaceTasks} from './workspace'
+import {openTasksWindow} from './tasksWindow'
 
 const ICS = [{name: 'iCalendar', extensions: ['ics']}]
 const now = () => new Date().toISOString()
@@ -36,6 +37,14 @@ export function registerCommands(ctx: PluginContext<Config>, current: () => Sess
         palette: true,
         enabled: () => !!current(),
         run: () => current()?.views.show('tasks'),
+    })
+    ctx.commands.register({
+        id: 'open-window',
+        label: 'plugins.tasks.commands.openWindow',
+        icon: 'i-lucide-app-window',
+        palette: true,
+        enabled: () => !!current()?.session.workspaceSession,
+        run: () => openTasksWindow(ctx, current()!).catch(error => notice(t('commands.openWindow'), error)),
     })
     ctx.commands.register({
         id: 'new-task',

@@ -1,6 +1,6 @@
 import {frontmatterRange} from '@type32/codemirror-rich-obsidian-editor'
 import {type Fields, parse, resolveFields, stringify, type Task, type TaskDocument, TasksFormatError} from '@type32/tasks'
-import {applyPatch, type TaskPatch} from '@type32/tasks-ui-components'
+import {applyPatch, type TaskPatch, toggleDone} from '@type32/tasks-ui-components'
 import type {SessionContext} from '@type32/vertex-plugin'
 import {obsidianYaml, setFrontmatterProperty} from '@type32/vertex-plugin/vault'
 import {computed, type ComputedRef, effectScope, shallowRef, toRaw, watch} from 'vue'
@@ -31,6 +31,10 @@ const BUILT_IN = resolveFields({})
 
 /** A note's text with its `task:` replaced; the body and the other keys as Obsidian writes frontmatter. */
 export const withNoteTask = (text: string, task: Task) => setFrontmatterProperty(text, 'task', task, yaml)
+
+/** The checkbox: a task completed in its own file (a repeating one moves to its next time), or reopened. */
+export const completeEntry = (store: WorkspaceTasks, entry: WorkspaceTask) =>
+    store.change(entry, toggleDone(entry.task, entry.fields, new Date().toISOString()))
 
 /** Writes frontmatter properties of the note at `path` (workspace-relative; `null` empties one), as one step of Files' undo. */
 export async function setNoteProperties(session: SessionContext, path: string, writes: { key: string, value: unknown }[], label: string) {
