@@ -1,7 +1,7 @@
 {
   "id": "tasks",
   "name": "Tasks",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Todos, events and timelines in .task files: a list of reminders, a board, a calendar and a timeline.",
   "icon": "i-lucide-list-checks",
   "author": "CTRL Neo Studios",
